@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myquizapp.databinding.QuestionItemBinding
 import com.example.myquizapp.utils.Question
 
-class QuizAdapter(private val viewModel: QuizViewModel): ListAdapter<Question, QuizAdapter.QViewHolder>(
-    DIFF_CALLBACK
-) {
+class QuizAdapter(private val viewModel: QuizViewModel): ListAdapter<Question, QuizAdapter.QViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onAnswerClickCallback: OnItemClickCallback
 

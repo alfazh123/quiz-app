@@ -17,6 +17,9 @@ class QuizActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuizBinding
 
+    private val viewmodel by lazy {
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +27,7 @@ class QuizActivity : AppCompatActivity() {
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val viewmodel = ViewModelProvider(this).get(QuizViewModel::class.java)
+//        val viewmodel = ViewModelProvider(this).get(QuizViewModel::class.java)
 
 //        val answers: MutableList<Answer> = mutableListOf()
 
@@ -52,9 +55,6 @@ class QuizActivity : AppCompatActivity() {
 //                answers.add(answersByQuestion)
 
                 viewmodel.addAnswer(answersByQuestion)
-                Log.d("QuizActivity", "Position: ${viewmodel.answerSize}")
-                Log.d("QuizActivity", "Answers: ${viewmodel.question.size}")
-                Log.d("QuizActivity", "Enable : ${viewmodel.answerSize < viewmodel.question.size}")
 
                 if (viewmodel.answerSize == viewmodel.question.size) {
                     binding.btnSubmit.isEnabled = true
@@ -66,18 +66,22 @@ class QuizActivity : AppCompatActivity() {
 
         })
 
-            binding.btnSubmit.setOnClickListener {
-                var result = ""
-                for (i in 0 until viewmodel.answers.size) {
-                    result += "${viewmodel.answers[i].question} : ${viewmodel.answers[i].index}\n"
-                }
-                Log.d("QuizActivity", "Result ViewModel: ${viewmodel.answers}")
-                Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
-                Log.d("QuizActivity", "Result: ${viewmodel.answers}")
-                val intent = Intent(this, ResultActivity::class.java)
-                intent.putExtra(ResultActivity.RESULT_VALUE, result)
-                startActivity(intent)
-            }
+        setupAction()
 
+    }
+
+    private fun setupAction() {
+        binding.btnSubmit.setOnClickListener {
+            var result = ""
+            for (i in 0 until viewmodel.answers.size) {
+                result += "${viewmodel.answers[i].question} : ${viewmodel.answers[i].index}\n"
+            }
+            Log.d("QuizActivity", "Result ViewModel: ${viewmodel.answers}")
+            Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
+            Log.d("QuizActivity", "Result: ${viewmodel.answers}")
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(ResultActivity.RESULT_VALUE, result)
+            startActivity(intent)
+        }
     }
 }
