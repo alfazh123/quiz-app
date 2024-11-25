@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,16 +22,12 @@ class QuizV2Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuizV2Binding
 
-//    private var indexedValue = 0
-
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(QuizV2ViewModel::class.java)
-    }
+    private lateinit var viewModel: QuizV2ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val viewModel = ViewModelProvider(this).get(QuizV2ViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(QuizV2ViewModel::class.java)
 
         binding = ActivityQuizV2Binding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -46,16 +43,12 @@ class QuizV2Activity : AppCompatActivity() {
         val adapter = QuizAdapterV2()
         binding.recyclerView.adapter = adapter
         viewModel.indexedValue.observe(this) { indexedValue ->
-            adapter.submitList(listQuestions[indexedValue])
-            val isEnd = viewModel.isEndOfQuestion(listQuestions)
-            Log.d("QuizV2Activity", "Is End: $isEnd")
+            adapter.submitList(viewModel.questions[indexedValue])
+            val isEnd = viewModel.isEndOfQuestion(viewModel.questions)
             setupAction(isEnd)
 
-//            isButtonEnabled()
+            binding.progressNumber.text = "${indexedValue + 1}/${viewModel.questions.size}"
 
-            Log.d("QuizV2Activity", "Indexed Value: $indexedValue")
-            Log.d("QuizV2Activity", "Length Question: ${listQuestions.size}")
-            Log.d("QuizV2Activity", "Indexed Value: ${listQuestions}")
         }
 
         adapter.setOnClickCallback(object : QuizAdapterV2.OnItemClickCallback {
@@ -63,26 +56,27 @@ class QuizV2Activity : AppCompatActivity() {
                 Log.d("QuizV2Activity", "Answer: $answer of ${position.question}")
                 val answerByQuestion = Answer(
                     position.question,
+                    position.number,
                     answer
                 )
 
                 viewModel.addAnswer(answerByQuestion)
 
-                viewModel.indexedValue.observe(this@QuizV2Activity) { indexedValue ->
-                    viewModel.questions.find {
-                        it[indexedValue].question == position.question
-                    }?.let {
-                        it[indexedValue].isChecked = true
-                    }
-                }
+                Log.d("QuizV2Activity", "Question: ${viewModel.questions}")
 
-                Log.d("QuizV2Activity", "Answer Size: ${viewModel.answerSize}")
-
-                if(viewModel.answerSize >= listQuestions[viewModel.indexedValue.value!!].size) {
+                if (viewModel.answerSize >= listQuestions[viewModel.indexedValue.value!!].size) {
                     binding.submitButton.isEnabled = true
                 } else {
                     binding.submitButton.isEnabled = false
                 }
+
+                val progress = if (position.number%viewModel.questions[viewModel.indexedValue.value!!].size != 0) {
+                    viewModel.answerSize%viewModel.questions[viewModel.indexedValue.value!!].size
+                } else  {
+                    viewModel.questions[viewModel.indexedValue.value!!].size
+                }
+
+                binding.progressIndicator.progress = ((progress) * 100) / listQuestions[viewModel.indexedValue.value!!].size
             }
         })
     }
@@ -90,31 +84,16 @@ class QuizV2Activity : AppCompatActivity() {
     private fun setupAction(isEnd:Boolean) {
         binding.submitButton.text = if (isEnd) "Submit" else "Next"
 
-        val list: MutableList<MutableList<Answer>> = viewModel.answers
-        list.map {
-            it.sortBy {
-                it.question
-            }
-        }
-//
-//
-        var result = ""
-        list.map {
-            it.forEach {
-                result += "$it \n"
-            }
-        }
-
         binding.submitButton.setOnClickListener {
             if (isEnd) {
                 Log.d("QuizV2Activity", "Submit ${viewModel.answers}")
                 val intent = Intent(this, ResultActivity::class.java)
-                intent.putExtra(ResultActivity.RESULT_VALUE, viewModel.answers.toString())
-//                intent.putExtra(ResultActivity.RESULT_VALUE, result)
+                intent.putIntegerArrayListExtra(ResultActivity.RESULT_VALUE, viewModel.resultAnswer())
                 startActivity(intent)
             } else {
                 viewModel.addIndexedValue()
                 binding.submitButton.isEnabled = false
+                binding.progressIndicator.progress = 0
             }
         }
     }

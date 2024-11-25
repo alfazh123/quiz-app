@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/question_card_view"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,9 +17,20 @@
             android:text="Question"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/checked_indicator"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/checked_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/icon_check"
+            app:layout_constraintBottom_toBottomOf="@+id/question_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/question_text_view" />
 
         <LinearLayout
             android:id="@+id/answers_linear_layout"
@@ -27,12 +39,20 @@
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/question_text_view">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginStart="8dp"
+                android:text="Not Agree"
+                android:textSize="18sp" />
+
             <RadioGroup
                 android:id="@+id/answers_radio_group"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:layout_margin="16dp"
+                android:layout_margin="14dp"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -61,6 +81,14 @@
                     android:layout_height="wrap_content" />
 
             </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginEnd="8dp"
+                android:text="Agree"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
