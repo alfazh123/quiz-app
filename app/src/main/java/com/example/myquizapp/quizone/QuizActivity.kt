@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myquizapp.MainActivity
 import com.example.myquizapp.ResultActivity
 import com.example.myquizapp.databinding.ActivityQuizBinding
 import com.example.myquizapp.utils.Answer
@@ -43,6 +42,7 @@ class QuizActivity : AppCompatActivity() {
                 Log.d("QuizActivity", "Answer: $answer of ${position.question}")
                 val answersByQuestion = Answer(
                     position.question,
+                    position.number,
                     answer
                 )
 
@@ -74,7 +74,7 @@ class QuizActivity : AppCompatActivity() {
         binding.btnSubmit.setOnClickListener {
             var result = ""
             for (i in 0 until viewmodel.answers.size) {
-                result += "${viewmodel.answers[i].question} : ${viewmodel.answers[i].index}\n"
+                result += "${viewmodel.answers[i].QuestionNumber} : ${viewmodel.answers[i].value}\n"
             }
             Log.d("QuizActivity", "Result ViewModel: ${viewmodel.answers}")
             Toast.makeText(this, result, Toast.LENGTH_SHORT).show()
