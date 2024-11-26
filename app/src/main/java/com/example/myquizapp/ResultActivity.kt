@@ -1,16 +1,15 @@
 package com.example.myquizapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myquizapp.databinding.ActivityResultBinding
-import com.example.myquizapp.quiztwo.Result
-import com.example.myquizapp.utils.Answer
 
+@OptIn(BuildCompat.PrereleaseSdkCheck::class)
 class ResultActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultBinding
@@ -38,6 +37,8 @@ class ResultActivity : AppCompatActivity() {
         binding.recyclerView2.setHasFixedSize(true)
         val adapter = ResultAdapter(result)
         binding.recyclerView2.adapter = adapter
+
+        onBackPressedCallback()
     }
 
     private fun setResultKey(result: ArrayList<Int>): MutableMap<Int, Int> {
@@ -51,4 +52,14 @@ class ResultActivity : AppCompatActivity() {
         }
         return map
     }
+
+    fun onBackPressedCallback() {
+        this.onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(this@ResultActivity, MainActivity::class.java)
+                startActivity(intent)
+            }
+        })
+    }
+
 }

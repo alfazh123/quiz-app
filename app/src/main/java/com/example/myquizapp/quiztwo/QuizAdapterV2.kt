@@ -46,7 +46,6 @@ class QuizAdapterV2: ListAdapter<QuestionV2, QuizAdapterV2.QuizAdapterViewHolder
 
         holder.radioGroup.setOnCheckedChangeListener(null)
         holder.radioGroup.clearCheck()
-        holder.itemView.setBackgroundColor(holder.itemView.context.resources.getColor(R.color.white))
         holder.checkIndicator.setImageResource(R.drawable.ic_uncheck)
 
         holder.radioGroup.setOnCheckedChangeListener { radioGroup, i ->
