@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myquizapp.MainActivity
-import com.example.myquizapp.ResultAdapter
 import com.example.myquizapp.databinding.FragmentResultBinding
 
 class ResultFragment : Fragment() {

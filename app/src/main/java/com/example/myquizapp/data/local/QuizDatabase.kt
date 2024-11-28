@@ -4,9 +4,9 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import android.content.Context
-import com.example.myquizapp.data.local.entity.AnswerEntity
+import com.example.myquizapp.data.local.entity.QuizEntity
 
-@Database(entities = [AnswerEntity::class], version = 1, exportSchema = false)
+@Database(entities = [QuizEntity::class], version = 1, exportSchema = false)
 abstract class QuizDatabase : RoomDatabase() {
     abstract fun dao(): QuizDao
 

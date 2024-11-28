@@ -26,9 +26,8 @@ data class Answer(
     val value: Int
 )
 
-val dummyQuestion = ArrayList<MutableList<Question>>()
-
 fun generateDummyQuestionV2(): ArrayList<MutableList<Question>> {
+    val dummyQuestion = ArrayList<MutableList<Question>>()
     if (dummyQuestion.isNotEmpty()) {
         return dummyQuestion
     }

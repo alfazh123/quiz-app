@@ -1,9 +1,16 @@
 package com.example.myquizapp.utils
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.myquizapp.data.AnswerRepository
+import com.example.myquizapp.data.local.entity.QuizEntity
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
 
 class QuizViewModel(val repository: AnswerRepository): ViewModel() {
 
@@ -52,11 +59,46 @@ class QuizViewModel(val repository: AnswerRepository): ViewModel() {
                 it.isChecked = true
                 it.value = answer.value
 
-
                 answers[_indexedValue.value!!].add(answer)
                 answerSize++
             }
         }
+    }
+
+    fun submitAnswer() {
+        val result = resultAnswer().joinToString(",")
+        val calendar = Calendar.getInstance()
+        val idQuiz = calendar.timeInMillis
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+        val date = dateFormat.format(Date())
+        val quizEntity = QuizEntity(
+            idQuiz.toString(),
+            result,
+            date
+        )
+
+        try {
+            viewModelScope.launch {
+                repository.submitQuizAnswer(quizEntity)
+            }
+        } catch (e: Exception) {
+            Log.e("QuizV2Activity", "Error: ${e.message}")
+        }
+
+        questions.clear()
+        answers.clear()
+    }
+
+    private val _quizResult = MutableLiveData<List<QuizEntity>>()
+    val quizResult: LiveData<List<QuizEntity>> = _quizResult
+
+    suspend fun getAllQuizResult() {
+        _quizResult.value = repository.getAnswers()
+    }
+
+    suspend fun deleteAllQuizResult() {
+        repository.deleteAllAnswers()
+        _quizResult.value = emptyList()
     }
 
     private fun sortAnswer(): MutableList<MutableList<Answer>> {
@@ -83,7 +125,6 @@ class QuizViewModel(val repository: AnswerRepository): ViewModel() {
                 resultMap.add(res)
             }
         }
-
 
         return resultValue
     }

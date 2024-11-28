@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.BuildCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myquizapp.databinding.ActivityResultBinding
+import com.example.myquizapp.quiz.ResultAdapter
 
 @OptIn(BuildCompat.PrereleaseSdkCheck::class)
 class ResultActivity : AppCompatActivity() {

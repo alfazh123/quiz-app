@@ -4,12 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "answers")
-class AnswerEntity (
-    @ColumnInfo(name = "question_id")
+@Entity(tableName = "quiz")
+class QuizEntity (
+    @ColumnInfo(name = "quiz_id")
     @PrimaryKey
-    val questionId: Int,
+    val quizId: String,
 
-    @ColumnInfo(name = "answer")
-    val answer: String,
+    @ColumnInfo(name = "quiz_answers")
+    val quizAnswers: String,
+
+    @ColumnInfo(name = "quiz_date")
+    val quizDate: String
 )

@@ -16,6 +16,8 @@ import com.example.myquizapp.utils.QuizViewModel
 import com.example.myquizapp.utils.Answer
 import com.example.myquizapp.utils.Question
 import com.example.myquizapp.utils.QuizAdapter
+import java.util.Calendar
+
 //import com.google.gson.Gson
 //import com.google.gson.reflect.TypeToken
 
@@ -65,7 +67,6 @@ class QuizFragment : Fragment() {
 
         adapter.setOnClickCallback(object : QuizAdapter.OnItemClickCallback {
             override fun onItemClicked(answer: Int, position: Question) {
-                Log.d("QuizV2Activity", "Answer: $answer of ${position.question}")
                 val answerByQuestion = Answer(
                     position.question,
                     position.number,
@@ -74,9 +75,10 @@ class QuizFragment : Fragment() {
 
                 viewModel.addAnswer(answerByQuestion)
 
-                Log.d("QuizV2Activity", "Question: ${viewModel.questions}")
+                Log.d("QuizV2Activity", "Answer Size: ${viewModel.answerSize} , List Question Size: ${viewModel.questions.size}")
+                Log.d("QuizV2Activity", "Questions: ${viewModel.questions}")
 
-                if (viewModel.answerSize >= listQuestionSize) {
+                if (viewModel.answerSize >= viewModel.questions[viewModel.indexedValue.value!!].size) {
                     binding.submitButton.isEnabled = true
                 } else {
                     binding.submitButton.isEnabled = false
@@ -88,7 +90,7 @@ class QuizFragment : Fragment() {
                     viewModel.questions[viewModel.indexedValue.value!!].size
                 }
 
-                binding.progressIndicator.progress = ((progress) * 100) / listQuestionSize
+                binding.progressIndicator.progress = ((progress) * 100) / viewModel.questions[viewModel.indexedValue.value!!].size
             }
         })
     }
@@ -104,6 +106,11 @@ class QuizFragment : Fragment() {
                 val fragment = ResultFragment()
                 fragment.arguments = bundle
                 it.findNavController().navigate(R.id.action_quizFragment_to_resultFragment, bundle)
+
+                val calendar = Calendar.getInstance()
+                val idQuiz = calendar.timeInMillis
+                Log.d("QuizV2Activity", "ID Quiz: $idQuiz")
+                viewModel.submitAnswer()
             } else {
                 viewModel.addIndexedValue()
                 binding.submitButton.isEnabled = false

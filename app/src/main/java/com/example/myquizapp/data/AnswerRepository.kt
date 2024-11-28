@@ -1,21 +1,23 @@
 package com.example.myquizapp.data
 
-import com.example.myquizapp.data.local.entity.AnswerEntity
 import com.example.myquizapp.data.local.QuizDao
+import com.example.myquizapp.data.local.entity.QuizEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AnswerRepository(
     private val dao: QuizDao
 ) {
 
-    fun getAnswers(): List<AnswerEntity> {
-        return dao.getAnswers()
+    suspend fun getAnswers(): List<QuizEntity>  = withContext(Dispatchers.IO){
+        dao.getAnswers()
     }
 
-    fun insertAnswer(answer: AnswerEntity) {
+    suspend fun submitQuizAnswer(answer: QuizEntity) = withContext(Dispatchers.IO) {
         dao.insertAnswer(answer)
     }
 
-    fun deleteAllAnswers() {
+    suspend fun deleteAllAnswers() = withContext(Dispatchers.IO) {
         dao.deleteAllAnswers()
     }
 

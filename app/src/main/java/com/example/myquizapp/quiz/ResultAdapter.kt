@@ -1,7 +1,6 @@
-package com.example.myquizapp
+package com.example.myquizapp.quiz
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myquizapp.databinding.LinearIndicatorBinding
