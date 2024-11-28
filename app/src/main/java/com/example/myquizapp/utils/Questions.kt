@@ -1,25 +1,45 @@
 package com.example.myquizapp.utils
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+// Model class for Quiz
+
 data class Question(
+    val page: Int,
     val question: String,
     val number: Int,
     var isChecked: Boolean = false,
-    val value: Int? = null
+    var value: Int? = null
 )
 
-val dummyQuestion = ArrayList<Question>()
-
-fun generateDummyQuestion(): ArrayList<Question> {
-    var numberQ = 1
-    for (i in 1..10) {
-        dummyQuestion.add(Question("Question $i", numberQ))
-        numberQ++
-    }
-    return dummyQuestion
-}
+@Parcelize
+data class Result(
+    val indexQ: Int,
+    val answer: Int
+) : Parcelable
 
 data class Answer(
     val question: String,
     val QuestionNumber: Int,
     val value: Int
 )
+
+val dummyQuestion = ArrayList<MutableList<Question>>()
+
+fun generateDummyQuestionV2(): ArrayList<MutableList<Question>> {
+    if (dummyQuestion.isNotEmpty()) {
+        return dummyQuestion
+    }
+    var numberQ = 1
+    for (i in 1..3) {
+        val questionList = mutableListOf<Question>()
+        for (j in 1..5) {
+            questionList.add(Question(i, "Question $numberQ", numberQ))
+            numberQ++
+        }
+        dummyQuestion.add(questionList)
+    }
+    return dummyQuestion
+}

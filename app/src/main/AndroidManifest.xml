@@ -13,13 +13,10 @@
         android:theme="@style/Theme.MyQuizApp"
         tools:targetApi="31">
         <activity
-            android:name=".quiztwo.QuizV2Activity"
+            android:name=".quiz.QuizActivity"
             android:exported="false" />
         <activity
             android:name=".ResultActivity"
-            android:exported="false" />
-        <activity
-            android:name=".quizone.QuizActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

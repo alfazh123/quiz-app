@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.MyQuizApp" parent="Base.Theme.MyQuizApp" />
+
+    <style name="Quiz" >
+        <item name="android:background">@color/white</item>
+    </style>
 </resources>

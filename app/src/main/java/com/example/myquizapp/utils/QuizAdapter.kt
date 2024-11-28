@@ -1,24 +1,21 @@
-package com.example.myquizapp.quiztwo
+package com.example.myquizapp.utils
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myquizapp.R
 import com.example.myquizapp.databinding.QuestionItemBinding
-import com.example.myquizapp.utils.Question
-import com.example.myquizapp.utils.QuestionV2
 
-class QuizAdapterV2: ListAdapter<QuestionV2, QuizAdapterV2.QuizAdapterViewHolder>(DIFF_CALLBACK) {
+class QuizAdapter: ListAdapter<Question, QuizAdapter.QuizAdapterViewHolder>(DIFF_CALLBACK) {
 
     private lateinit var onAnswerClickCallback: OnItemClickCallback
 
     interface OnItemClickCallback {
-        fun onItemClicked(answer: Int, position: QuestionV2)
+        fun onItemClicked(answer: Int, position: Question)
     }
 
     fun setOnClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -30,7 +27,7 @@ class QuizAdapterV2: ListAdapter<QuestionV2, QuizAdapterV2.QuizAdapterViewHolder
         val radioGroup = binging.answersRadioGroup
         val checkIndicator = binging.checkedIndicator
 
-        fun bind(question: QuestionV2, position: Int) {
+        fun bind(question: Question, position: Int) {
             this.question.text = question.question
         }
     }
@@ -72,14 +69,14 @@ class QuizAdapterV2: ListAdapter<QuestionV2, QuizAdapterV2.QuizAdapterViewHolder
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<QuestionV2> =
-            object : DiffUtil.ItemCallback<QuestionV2>() {
-                override fun areItemsTheSame(oldItem: QuestionV2, newItem: QuestionV2): Boolean {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<Question> =
+            object : DiffUtil.ItemCallback<Question>() {
+                override fun areItemsTheSame(oldItem: Question, newItem: Question): Boolean {
                     return oldItem.page == newItem.page
                 }
 
                 @SuppressLint("DiffUtilEquals")
-                override fun areContentsTheSame(oldItem: QuestionV2, newItem: QuestionV2): Boolean {
+                override fun areContentsTheSame(oldItem: Question, newItem: Question): Boolean {
                     return oldItem == newItem
                 }
             }

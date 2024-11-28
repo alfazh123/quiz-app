@@ -1,23 +1,18 @@
-package com.example.myquizapp.quiztwo
+package com.example.myquizapp.utils
 
-import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.myquizapp.utils.Answer
-import com.example.myquizapp.utils.QuestionV2
-import com.example.myquizapp.utils.generateDummyQuestionV2
-import kotlinx.parcelize.Parcelize
+import com.example.myquizapp.data.AnswerRepository
 
-class QuizV2ViewModel: ViewModel() {
+class QuizViewModel(val repository: AnswerRepository): ViewModel() {
 
     private var _indexedValue = MutableLiveData<Int>().apply { value = 0 }
     val indexedValue: LiveData<Int> = _indexedValue
 
     private var _isLastQuestion = MutableLiveData<Boolean>().apply { value = false }
-    val isLastQuestion: LiveData<Boolean> = _isLastQuestion
 
-    fun isEndOfQuestion(listQuestions: ArrayList<MutableList<QuestionV2>>): Boolean {
+    fun isEndOfQuestion(listQuestions: ArrayList<MutableList<Question>>): Boolean {
         if (_indexedValue.value == listQuestions.size - 1) {
             _isLastQuestion.value = true
         }
@@ -29,7 +24,13 @@ class QuizV2ViewModel: ViewModel() {
         answerSize = 0
     }
 
-    val questions = generateDummyQuestionV2()
+    val questions = arrayListOf<MutableList<Question>>()
+
+    init {
+        if (questions.isEmpty()) {
+            questions.addAll(generateDummyQuestionV2())
+        }
+    }
 
     var answers: MutableList<MutableList<Answer>> = arrayListOf()
     var answerSize = 0
@@ -51,13 +52,14 @@ class QuizV2ViewModel: ViewModel() {
                 it.isChecked = true
                 it.value = answer.value
 
+
                 answers[_indexedValue.value!!].add(answer)
                 answerSize++
             }
         }
     }
 
-    fun sortAnswer(): MutableList<MutableList<Answer>> {
+    private fun sortAnswer(): MutableList<MutableList<Answer>> {
         val sortedAnswer = mutableListOf<MutableList<Answer>>()
         for (i in 0 until questions.size) {
             sortedAnswer.add(answers[i].sortedBy { it.QuestionNumber }.toMutableList())
@@ -87,9 +89,3 @@ class QuizV2ViewModel: ViewModel() {
     }
 
 }
-
-@Parcelize
-data class Result(
-    val indexQ: Int,
-    val answer: Int
-) : Parcelable
