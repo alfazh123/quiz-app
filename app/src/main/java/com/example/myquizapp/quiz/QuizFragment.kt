@@ -49,8 +49,6 @@ class QuizFragment : Fragment() {
 
     private fun setupQuestion() {
 
-        val listQuestionSize = viewModel.questions.size
-
         val linearLayoutManager = LinearLayoutManager(requireActivity())
         binding.recyclerView.layoutManager = linearLayoutManager
         val adapter = QuizAdapter()
@@ -75,20 +73,13 @@ class QuizFragment : Fragment() {
 
                 viewModel.addAnswer(answerByQuestion)
 
-                Log.d("QuizV2Activity", "Answer Size: ${viewModel.answerSize} , List Question Size: ${viewModel.questions.size}")
-                Log.d("QuizV2Activity", "Questions: ${viewModel.questions}")
-
                 if (viewModel.answerSize >= viewModel.questions[viewModel.indexedValue.value!!].size) {
                     binding.submitButton.isEnabled = true
                 } else {
                     binding.submitButton.isEnabled = false
                 }
 
-                val progress = if (position.number%viewModel.questions[viewModel.indexedValue.value!!].size != 0) {
-                    viewModel.answerSize%viewModel.questions[viewModel.indexedValue.value!!].size
-                } else  {
-                    viewModel.questions[viewModel.indexedValue.value!!].size
-                }
+                val progress = viewModel.progress(position.number)
 
                 binding.progressIndicator.progress = ((progress) * 100) / viewModel.questions[viewModel.indexedValue.value!!].size
             }
@@ -100,7 +91,6 @@ class QuizFragment : Fragment() {
 
         binding.submitButton.setOnClickListener {
             if (isEnd) {
-                Log.d("QuizV2Activity", "Submit ${viewModel.answers}")
                 val bundle = Bundle()
                 bundle.putIntegerArrayList(ResultFragment.RESULT_VALUE, viewModel.resultAnswer())
                 val fragment = ResultFragment()
@@ -109,7 +99,6 @@ class QuizFragment : Fragment() {
 
                 val calendar = Calendar.getInstance()
                 val idQuiz = calendar.timeInMillis
-                Log.d("QuizV2Activity", "ID Quiz: $idQuiz")
                 viewModel.submitAnswer()
             } else {
                 viewModel.addIndexedValue()

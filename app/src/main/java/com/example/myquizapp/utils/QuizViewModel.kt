@@ -129,4 +129,12 @@ class QuizViewModel(val repository: AnswerRepository): ViewModel() {
         return resultValue
     }
 
+    fun progress(position: Int): Int {
+        return if (position % questions[_indexedValue.value!!].size != 0) {
+            answerSize % questions[_indexedValue.value!!].size
+        } else {
+            questions[_indexedValue.value!!].size
+        }
+    }
+
 }
