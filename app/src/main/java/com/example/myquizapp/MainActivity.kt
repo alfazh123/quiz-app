@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myquizapp.data.ViewModelFactory
 import com.example.myquizapp.databinding.ActivityMainBinding
 import com.example.myquizapp.quiz.QuizActivity
+import com.example.myquizapp.utils.CustomDialog
 import com.example.myquizapp.utils.QuizViewModel
 import kotlinx.coroutines.launch
 
@@ -24,13 +26,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.rvResults.layoutManager = LinearLayoutManager(this@MainActivity)
+        binding.rvResults.setHasFixedSize(true)
+
         binding.startTestButton.setOnClickListener {
-            startActivity(Intent(this, QuizActivity::class.java))
+            startQuiz()
         }
 
         lifecycleScope.launch {
@@ -38,22 +42,14 @@ class MainActivity : AppCompatActivity() {
 
             viewModel.quizResult.observe(this@MainActivity) { result ->
                 if (result.size > 0) {
-                    binding.welcomeText.text = "Welcome you have taken ${result.size} quiz before"
-                    binding.btnDeleteQuizResult.visibility = View.VISIBLE
-                    binding.rvResults.visibility = View.VISIBLE
-                    binding.rvResults.layoutManager = LinearLayoutManager(this@MainActivity)
-                    binding.rvResults.setHasFixedSize(true)
+                    binding.startTestButton.text = "Retake Quiz"
+                    hasQuizResult(true)
                     val adapter = QuizResultAdapter(result.take(3))
                     binding.rvResults.adapter = adapter
                 } else {
-                    binding.welcomeText.text = "Welcome you have not taken any quiz before"
-                    binding.btnDeleteQuizResult.visibility = View.GONE
-                    binding.rvResults.visibility = View.GONE
+                    binding.startTestButton.text = "Take Quiz"
+                    hasQuizResult(false)
                 }
-                Log.d("MainActivity", "Result: ${result.map { 
-                    it.quizId to it.quizAnswers
-                }}")
-                Log.d("MainActivity", "Result Size: ${result.size}")
             }
         }
 
@@ -62,6 +58,27 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 viewModel.deleteAllQuizResult()
             }
+        }
+
+    }
+
+    private fun startQuiz() {
+        CustomDialog().showDialog({ positive ->
+            if (positive == true) {
+                startActivity(Intent(this, QuizActivity::class.java))
+            } else {
+                Log.d("MainActivity", "Negative")
+            }
+        }, this, "Start Quiz", "Are you sure you want to start the quiz?")
+    }
+
+    private fun hasQuizResult(isHasQuizResult: Boolean) {
+        if (isHasQuizResult) {
+            binding.quizLayout.visibility = View.VISIBLE
+            binding.emptyLayout.visibility = View.GONE
+        } else {
+            binding.quizLayout.visibility = View.GONE
+            binding.emptyLayout.visibility = View.VISIBLE
         }
 
     }
