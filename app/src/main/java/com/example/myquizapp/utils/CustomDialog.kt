@@ -4,10 +4,8 @@ import android.content.Context
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import com.example.myquizapp.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.dialog.MaterialDialogs
 
 class CustomDialog {
     fun showDialog(callback: (Boolean?)->Unit, context: Context, title: String = "Confirmation", message: String = "Are you sure?", buttonPositiveText: String = "Ok", buttonNegativeText: String = "Cancel") {

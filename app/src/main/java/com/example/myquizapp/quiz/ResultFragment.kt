@@ -79,4 +79,9 @@ class ResultFragment : Fragment() {
         }
         return map
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
