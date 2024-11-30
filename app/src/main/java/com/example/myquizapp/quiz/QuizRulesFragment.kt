@@ -1,6 +1,8 @@
 package com.example.myquizapp.quiz
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import com.example.myquizapp.R
 import com.example.myquizapp.databinding.FragmentQuizRulesBinding
+import com.example.myquizapp.utils.CustomDialog
 
 class QuizRulesFragment : Fragment() {
 
@@ -27,7 +30,13 @@ class QuizRulesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnStartQuiz.setOnClickListener {
-            it.findNavController().navigate(R.id.action_quizRulesFragment_to_quizFragment)
+            CustomDialog().showDialog({ positive ->
+                if (positive == true) {
+                    it.findNavController().navigate(R.id.action_quizRulesFragment_to_quizFragment)
+                } else {
+                    Log.d("MainActivity", "Negative")
+                }
+            }, requireActivity(), "Start Quiz", "Are you sure you want to start the quiz?")
         }
     }
 

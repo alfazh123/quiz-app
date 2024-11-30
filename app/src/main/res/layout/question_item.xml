@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/question_card_view"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        style="@style/Quiz"
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        style="@style/Quiz"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:weighSum>-->
+
+    <LinearLayout
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/question_text_view"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1.9"
             android:layout_margin="16dp"
             android:text="Question"
             android:textSize="24sp"
@@ -26,17 +34,22 @@
             android:id="@+id/checked_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
             android:src="@drawable/icon_check"
             app:layout_constraintBottom_toBottomOf="@+id/question_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/question_text_view" />
 
+    </LinearLayout>
+
         <LinearLayout
             android:id="@+id/answers_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:weightSum="100"
+            android:layout_weight="70"
             android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/question_text_view">
 
@@ -44,6 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_weight="10"
                 android:layout_marginStart="8dp"
                 android:text="Not Agree"
                 android:textSize="18sp" />
@@ -53,33 +67,81 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_weight="50"
+                android:weightSum="50"
                 android:layout_margin="14dp"
                 android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/answer_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+<!--                <LinearLayout-->
+<!--                    android:layout_weight="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
 
-                <RadioButton
-                    android:id="@+id/answer_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/answer_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
 
-                <RadioButton
-                    android:id="@+id/answer_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+<!--                </LinearLayout>-->
 
-                <RadioButton
-                    android:id="@+id/answer_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+<!--                <LinearLayout-->
+<!--                    android:layout_weight="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
 
-                <RadioButton
-                    android:id="@+id/answer_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    <RadioButton
+                        android:id="@+id/answer_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_weight="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
+
+                    <RadioButton
+                        android:id="@+id/answer_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_weight="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
+
+                    <RadioButton
+                        android:id="@+id/answer_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:layout_weight="10"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical">-->
+
+                    <RadioButton
+                        android:id="@+id/answer_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+<!--                </LinearLayout>-->
 
             </RadioGroup>
 
@@ -87,12 +149,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_weight="10"
                 android:layout_marginEnd="8dp"
                 android:text="Agree"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>

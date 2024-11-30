@@ -6,4 +6,8 @@
     <color name="blue_700_18">#2F145FBC</color>
     <color name="blue_700_50">#4D145FBC</color>
     <color name="blue_700_">#145FBC</color>
+
+    <color name="green_700_18">#CC0AB612</color>
+
+    <color name="gray_700_18">#2F616161</color>
 </resources>

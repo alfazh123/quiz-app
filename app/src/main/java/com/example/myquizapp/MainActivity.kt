@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         binding.rvResults.setHasFixedSize(true)
 
         binding.startTestButton.setOnClickListener {
-            startQuiz()
+            startActivity(Intent(this, QuizActivity::class.java))
         }
 
         lifecycleScope.launch {
@@ -60,16 +60,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun startQuiz() {
-        CustomDialog().showDialog({ positive ->
-            if (positive == true) {
-                startActivity(Intent(this, QuizActivity::class.java))
-            } else {
-                Log.d("MainActivity", "Negative")
-            }
-        }, this, "Start Quiz", "Are you sure you want to start the quiz?")
     }
 
     private fun hasQuizResult(isHasQuizResult: Boolean) {

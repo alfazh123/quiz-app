@@ -1,25 +1,26 @@
 package com.example.myquizapp.quiz
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myquizapp.MainActivity
 import com.example.myquizapp.R
 import com.example.myquizapp.data.ViewModelFactory
 import com.example.myquizapp.databinding.FragmentQuizBinding
 import com.example.myquizapp.utils.QuizViewModel
 import com.example.myquizapp.utils.Answer
+import com.example.myquizapp.utils.CustomDialog
 import com.example.myquizapp.utils.Question
 import com.example.myquizapp.utils.QuizAdapter
-import java.util.Calendar
-
-//import com.google.gson.Gson
-//import com.google.gson.reflect.TypeToken
 
 class QuizFragment : Fragment() {
 
@@ -61,6 +62,8 @@ class QuizFragment : Fragment() {
 
             binding.progressNumber.text =
                 getString(R.string.index_question, (index + 1).toString(), viewModel.questions.size.toString())
+
+            onBackPressedCallback()
         }
 
         adapter.setOnClickCallback(object : QuizAdapter.OnItemClickCallback {
@@ -73,15 +76,30 @@ class QuizFragment : Fragment() {
 
                 viewModel.addAnswer(answerByQuestion)
 
-                if (viewModel.answerSize >= viewModel.questions[viewModel.indexedValue.value!!].size) {
-                    binding.submitButton.isEnabled = true
-                } else {
-                    binding.submitButton.isEnabled = false
+                with(binding) {
+                    if (viewModel.answerSize >= viewModel.questions[viewModel.indexedValue.value!!].size) {
+                        submitButton.isEnabled = true
+                    } else {
+                        submitButton.isEnabled = false
+                    }
                 }
 
                 val progress = viewModel.progress(position.number)
 
                 binding.progressIndicator.progress = ((progress) * 100) / viewModel.questions[viewModel.indexedValue.value!!].size
+            }
+        })
+    }
+
+    private fun onBackPressedCallback() {
+        requireActivity().onBackPressedDispatcher.addCallback(requireActivity(), object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                CustomDialog().showDialog({ exit ->
+                    if (exit!!) {
+                        val intent = Intent(context, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                }, requireContext(), "Are you sure you want to exit the quiz?", "If you exit, your progress will be lost.", "Exit", "Cancel")
             }
         })
     }
@@ -97,8 +115,6 @@ class QuizFragment : Fragment() {
                 fragment.arguments = bundle
                 it.findNavController().navigate(R.id.action_quizFragment_to_resultFragment, bundle)
 
-                val calendar = Calendar.getInstance()
-                val idQuiz = calendar.timeInMillis
                 viewModel.submitAnswer()
             } else {
                 viewModel.addIndexedValue()
